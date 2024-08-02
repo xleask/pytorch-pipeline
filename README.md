@@ -29,9 +29,9 @@ python train.py -t configs/example_model/example_training_cfg.yaml
 ```
 or training using [DDP](https://pytorch.org/tutorials/intermediate/ddp_tutorial.html) via `torchrun`:
 ```
-torchrun --standalone --nnodes=1 --nproce_per_node=2 train.py -t configs/example_model/example_multigpu_training_cfg.yaml
+torchrun --standalone --nnodes=1 --nproc_per_node=2 train.py -t configs/example_model/example_multigpu_training_cfg.yaml
 ```
-where the value for `--nproce_per_node` must match the length of the GPU list in the training config.
+where the value for `--nproc_per_node` must match the length of the GPU list in the training config.
 
 **Evaluate GAN training** (specify trained model checkpoint in YAML):
 ```
@@ -50,7 +50,7 @@ python jit_trace_model.py -t configs/example_model/example_training_cfg.yaml -c 
 
 ## Model Design
 
-MOdels are specified by their model architecture and their model flow that live in the same subdirectory under `models`.
+Models are specified by their model architecture and their model flow that live in the same subdirectory under `models`.
 
 ### Model Architecture
 
@@ -60,14 +60,14 @@ There are two main parts to designing an architecture:
 1. Defining high-level `model_components`. Typically, these components are flow-independent, such as in the case of a GAN where the generator and discriminator act as standalone networks.
   - Each model component must have one or more `submodels`. Submodels must be defined in order of their dependence, i.e., an earlier submodel must not depend on the output of a later submodel. Submodels allow for flexibility in model flow.
 2. Defining low-level `submodels`. Each `submodel` in `model_components` must be defined in the YAML with the following keys:
-  - `submodel_inputs`: Either directly from the training batch (`input_data`) or from the output of a submodel (e.g., ~{gen_cnn: 'output'}`).
+  - `submodel_inputs`: Either directly from the training batch (`input_data`) or from the output of a submodel (e.g., `{gen_cnn: 'output'}`).
   - `layer_name_prefix`: String to prepend all layer names. Used for clarity and skip connections.
   - `layers`: Dictionary of layer name (defined in torch or `layers.py`) and corresponding keyword arguments.
   - `skip_connections`: Supports skip connections within and across submodels. Dictionary of submodel layer name keys with values that are dictionaries to future layers in other submodels. E.g., `{gen_cnn_Conv2d_0: {'future_layers': ['gen_dec_ReLU_4'], connection_types: ['add']}}`
 
 ### Model Flow
 
-Model flows are defined in a regular torch `nn.Module` class (e.g., [here](models/example_model/example_model.py)). Model components are read from the model architecture and accessed through `self.model_components`. For example, inputs can be mapped in the forward method via:
+Model flows are defined in a regular torch `nn.Module` class in a model-specific directory (e.g., [here](models/example_model/example_model.py)). Model components are read from the model architecture and accessed through `self.model_components`. For example, inputs can be mapped in the forward method via:
 ```
 new_skip_dict = {}
 generator = self.model_components['generator']
