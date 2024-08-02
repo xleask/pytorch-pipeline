@@ -1,0 +1,15 @@
+# For additional information, check evaluate_training.py.
+
+evaluation: {
+    checkpoint_dir: models/example_model/model_checkpoints/v0.1/,
+    checkpoints: [example_model_v0.1_epoch1000_20240801-200415.pth],
+    
+    preprocessing_params: {
+        loss_average_window: 10,
+    },
+    
+    saving_params: {
+        save_output: True,
+        filename: v0.1_gan_loss.png,
+    }
+}

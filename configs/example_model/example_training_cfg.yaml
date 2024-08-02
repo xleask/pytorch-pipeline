@@ -1,0 +1,64 @@
+# For additional information, check train.py, and corresponding modules for model/loss/dataset.
+# Leave a parameter null to use its default value or ignore it.
+
+training: {
+    n_epochs: 1000,
+    learning_rate: 0.0015,
+    learning_rate_gamma: 0.5,
+    learning_rate_step: 10000,
+    # gpus is a list of GPU IDs
+    gpus: [],
+    optimizer: Adam,
+    batch_size: 2,
+}
+
+# If adversarial training is enabled, above training parameters are used for generator, below are for discriminator.
+adversarial: {
+    enable_adversarial_training: True,
+    learning_rate: 0.0015,
+    learning_rate_gamma: 0.5,
+    learning_rate_step: 10000,
+    optimizer: Adam,
+    train_disc_first: False,
+    n_gen_iterations: 1,
+    n_disc_iterations: 1,
+}
+
+model: {
+    architecture_cfg_path: models/example_model/example_model_architecture.yaml,
+    model_flow_path: models/example_model/example_model.py,
+    model_checkpoint_filename: null,
+}
+
+loss: {
+    loss_fn: example_loss,
+    loss_args: {
+        target_adv: 1.0,
+    }
+}
+
+saving: {
+    save_epoch_increment: 100,
+    save_filename_prefix: example_model_v0.1,
+    save_folder_name: v0.1,
+}
+
+# Input and target data arguments. All input/target data are specified here.
+# data_len_key is the data key in dataset_parameters whose data length should be used for the PyTorch dataset, used for batching a full epoch.
+dataset: {
+    data_len_key: gen_inputs,
+    gen_inputs: {
+        n_inputs: -1,
+        randomize_inputs: True,
+        data_read_type: file,
+        data_path: [data/example_dataset.h5,],
+        file_reader: example_data_reader,
+        file_reader_args: null,
+        data_generating_function: null,
+        data_generating_function_args: null,
+        data_read_postprocessing_fn: example_data_postprocessor,
+        data_batch_transform: example_batch_transform,
+        data_batch_transform_args: {augment: True, add_image_noise: True},
+        multiple_samples_per_file: True,
+    }
+}

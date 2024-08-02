@@ -1,0 +1,13 @@
+# For additional information, check evaluate.py
+# Model used is defined in accompanying training yaml file, which automates the loading/saving directories.
+
+evaluation: {
+    # Checkpoint of model defined in associated training yaml file.
+    model_checkpoint_filename: example_model_v0.1_epoch1000_20240801-205224.pth,
+    
+    # Save filename handled programmatically based on training config and checkpoint name.
+    save_params: {
+        save_correction: True,
+        save_filename: example_model_output.png,
+    }
+}

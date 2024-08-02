@@ -1,0 +1,51 @@
+# If GAN-type, requires 'generator' and 'discriminator', otherwise just use 'generator'.
+# SUbmodels, in order of their flow. I.e., submodel must not depend on submodels layer in list.
+model_components: {
+    generator: {
+        adv_type: generator,
+        submodels: ['gen_cnn'],
+    },
+    discriminator: {
+        adv_type: discriminator,
+        submodels: ['disc_cnn'],
+    }
+}
+
+# Details of submodels. Brief description and requirements:
+#   - Each submodel in above 'submodels' must be defined here.
+#   - adversarial_type must be specified for GAN-type networks, used for freezing/unfreezing subnetworks. Must be one of ('gen', 'disc').
+#   - submodel_input has two configurations:
+#       1) {input_data: 'input_data_string_key'}, always from input data, extracting input data dictionary values.
+#       2) {submodel_name: 'submodel_layer_name'}, output of given submodel and layer. If just submodel output, value is 'output'.
+#       - Supports multiple key:value pairs to iterate over.
+#
+#   - layer_name_prefix: String prefix for layer names.
+#   - layers: Dictionary of layer type and associated parameters, following PyTorch layer arguments.
+#   - skip_connections: Any output or input from current submodel to another layer in current or another submodel.
+gen_cnn: {
+    submodel_input: {input_data: {data_Key: 'data', input_size: [1, 4, 4]}},
+    layer_name_prefix: 'gen_cnn',
+    layers: [
+        {layer_type: 'Conv2d', layer_params: {out_channels: 16, kernel_size: 3, stride: 1, padding: 1, dilation: 1, bias: 0}},
+        {layer_type: 'ResidualBlock', layer_params: {out_channels: 16, kernel_size: 3, stride: 1, padding: 1, dilation: 1, bias: 0}},
+        {layer_type: 'ResidualBlock', layer_params: {out_channels: 16, kernel_size: 3, stride: 1, padding: 1, dilation: 1, bias: 0}},
+        {layer_type: 'Conv2d', layer_params: {out_channels: 1, kernel_size: 3, stride: 1, padding: 1, dilation: 1, bias: 0}},
+        {layer_type: 'ReLU', layer_params: null},
+    ],
+    skip_connections: {
+    }
+}
+
+disc_cnn: {
+    submodel_input: {gen_cnn: 'output'},
+    layer_name_prefix: 'disc_cnn',
+    layers: [
+        {layer_type: 'Conv2d', layer_params: {out_channels: 64, kernel_size: 3, stride: 2, padding: 1, dilation: 1, bias: 0}},
+        {layer_type: 'BatchNorm2d', layer_params: null},
+        {layer_type: 'LeakyReLU', layer_params: null},
+        {layer_type: 'Conv2d', layer_params: {out_channels: 1, kernel_size: 2, stride: 1, padding: 0, dilation: 1, bias: 0}},
+        {layer_type: 'Sigmoid', layer_params: null},
+    ],
+    skip_connections: {
+    }
+}
