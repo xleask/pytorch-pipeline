@@ -8,7 +8,7 @@ This pipeline is designed to be built upon for project-specific requirements. Pl
 
 Python >3.10
 
-View `requirements.txt` for external packages.
+View `requirements.txt` for external packages. Note, `pip install -r requirements.txt` may not work for installing `torch` and `torchvision`, it is recommended to install them separately to ensure compatability with the running workstation.
 
 ## Quick Start
 
