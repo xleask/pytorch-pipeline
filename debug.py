@@ -12,7 +12,7 @@ from evaluate import main as main_evaluation
 
 #%% Training debug
 
-args = {'cfg':r'configs/example_model/example_training_cfg.yaml'}
+args = {'training_cfg':r'configs/example_model/example_training_cfg.yaml'}
 main(args)
 
 #%% Evaluation debug

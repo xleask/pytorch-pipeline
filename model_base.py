@@ -93,11 +93,14 @@ class PyNetIO(nn.Module):
             submodel_input = architecture[submodel_name]['submodel_input']
             submodel_input_keys = list(submodel_input.keys())
             
-            if 'input_data' in submodel_input_keys:
-                # Submodel input size directly specified
+            if 'input_size' in submodel_input_keys:
+                # Submodel input size is explicitly specified.
+                input_size = tuple(submodel_input['input_size'])
+            elif 'input_data' in submodel_input_keys:
+                # Submodel input size specified via data input size.
                 input_size = tuple(submodel_input['input_data']['input_size'])
             else:
-                # SUbmodel input size based on output of another submodel.
+                # Submodel input size based on output of another submodel.
                 submodel_output_key = submodel_input_keys[0]
                 if submodel_output_key in submodels:
                     # Submodel is within this model component.
