@@ -1,6 +1,6 @@
 # Base PyTorch Pipeline
 
-Base/example functionality for training and evaluation PyTorch models, supporting adversarial training and programmatic creation of model architectures for quick experimentation.
+Base/example functionality for training and evaluating PyTorch models, supporting adversarial training and programmatic creation of model architectures for quick experimentation.
 
 This pipeline is designed to be built upon for project-specific requirements. Please fork this repo for specific projects.
 
