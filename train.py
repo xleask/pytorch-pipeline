@@ -84,7 +84,7 @@ class ModelTrainer(ModelTrainerBase):
     
     def training_loop(self):
         '''
-        For agiven epoch, iterate through batched dataset, updating weights and
+        For a given epoch, iterate through batched dataset, updating weights and
         collecting iteration losses.
         '''
         # For user-termination, flag early_termination
