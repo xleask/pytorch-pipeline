@@ -24,8 +24,7 @@ class PyDataset(PyDatasetIO):
     
     def __getitem__(self, index):
         '''
-        Data are accessed via this method. If self.target_data is not None,
-        return coupled input-target data.
+        Data are accessed via this method.
     
         index : integer or array
             Index/indices of input/arget data to return.    

@@ -71,7 +71,7 @@ class PyDatasetIO(Dataset):
         file_reader_args : tuple or dict
             Arguments to be supplied to file_reader function.
         data_function : function or None
-            FOr 'function' data_read_type, function must be provided.
+            For 'function' data_read_type, function must be provided.
         data_function_args : tuple or dict
             Arguments for provided data_function
         multiple_samples : boolean

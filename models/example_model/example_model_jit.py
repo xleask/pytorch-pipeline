@@ -79,7 +79,7 @@ class PyNet(PyNetIO):
         
         return outputs
     
-    
+    @torch.no_grad()
     def forward_inference(self, inputs):
         new_skip_dict = {}
         
@@ -103,7 +103,7 @@ class PyNet(PyNetIO):
         
         return gen_outputs
     
-    
+    @torch.no_grad()
     def forward_inference_discriminator(self, inputs):
         return inputs
     
